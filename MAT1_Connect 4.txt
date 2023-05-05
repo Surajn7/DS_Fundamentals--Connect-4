@@ -1,0 +1,192 @@
+https://replit.com/@SurajNetha/MAT-1-Connect-4
+
+#include <cctype>
+#include <iostream>
+#include <vector>
+using namespace std;
+class TicTacToe {
+public:
+  char board[6][7];
+  const char Player1 = 'R';
+  const char Player2 = 'B';
+
+  void rules() {
+    cout << "Welcome to TicTacToe game \n\n";
+    cout << "Rules : "
+         << "\n1.Two player game R(Red) is Player 1 and B(Blue) is Player 2 \n";
+    cout << "2.Board Size is 6 rows and 9 columns \n";
+    cout << "3.Players wins when 4 dots are connected in "
+            "horizontal/vertical/diagonally \n";
+    cout << "4.Draw when board is filled but when rule 3 doesn't meet \n\n\n";
+    cout << "How to Play : "
+         << "\n1.Game starts with player 1 i.e R(Red)  \n";
+    cout << "2.In each step choose in which column number in which you want to "
+            "mark \n";
+    cout << "3.Rows will be filled from bottom to top in any column \n\n\n";
+  }
+
+  char startGame() {
+    char start;
+    char play = 'Y', exit = 'N';
+    cout << "Press Y/y to start the game or N/n to close the game \n";
+    cin >> start;
+    play = toupper(play);
+    exit = toupper(exit);
+    if (start == 'Y')
+      printBoard();
+    else if (start == 'N')
+      cout << "See you again !!! \n";
+    else
+      cout << "Please give either Y or N \n";
+    return start;
+  }
+
+  void resetBoard() {
+    for (int i = 0; i < 6; i++) {
+      for (int j = 0; j < 7; j++) {
+        board[i][j] = ' ';
+      }
+    }
+  }
+
+  void printBoard() {
+    cout << "----------------" << endl;
+    cout << "|" << board[0][0] << "|" << board[0][1] << "|" << board[0][2]
+         << "|" << board[0][3] << "|" << board[0][4] << "|" << board[0][5]
+         << "|" << board[0][6] << "|" << endl;
+    cout << "----------------" << endl;
+    cout << "|" << board[1][0] << "|" << board[1][1] << "|" << board[1][2]
+         << "|" << board[1][3] << "|" << board[1][4] << "|" << board[1][5]
+         << "|" << board[1][6] << "|" << endl;
+    cout << "----------------" << endl;
+    cout << "|" << board[2][0] << "|" << board[2][1] << "|" << board[2][2]
+         << "|" << board[2][3] << "|" << board[2][4] << "|" << board[2][5]
+         << "|" << board[2][6] << "|" << endl;
+    cout << "----------------" << endl;
+    cout << "|" << board[3][0] << "|" << board[3][1] << "|" << board[3][2]
+         << "|" << board[3][3] << "|" << board[3][4] << "|" << board[3][5]
+         << "|" << board[3][6] << "|" << endl;
+    cout << "----------------" << endl;
+    cout << "|" << board[4][0] << "|" << board[4][1] << "|" << board[4][2]
+         << "|" << board[4][3] << "|" << board[4][4] << "|" << board[4][5]
+         << "|" << board[4][6] << "|" << endl;
+    cout << "----------------" << endl;
+    cout << "|" << board[5][0] << "|" << board[5][1] << "|" << board[5][2]
+         << "|" << board[5][3] << "|" << board[5][4] << "|" << board[5][5]
+         << "|" << board[5][6] << "|" << endl;
+    cout << "----------------" << endl;
+  }
+
+  int checkFreespace() {
+    int freeSpace = 42;
+    for (int i = 5; i >= 0; i--) {
+      for (int j = 0; j <= 6; j++) {
+        if (board[i][j] != ' ')
+          freeSpace--;
+      }
+    }
+    return freeSpace;
+  }
+
+  void markPlayer1() {
+    int col;
+    int row = 6;
+    do {
+      cout << "Player 1's turn \n";
+      cout << "Column(1-7) : ";
+      cin >> col;
+      cout << "\nEntered Row(1-6) : " << row << "\nColumn(1-7) : " << col
+           << endl;
+      col--;
+      row--;
+
+      if (board[row][col] == ' ') {
+        board[row][col] = Player1;
+        break;
+      }
+    } while (board[row][col] != ' ');
+  }
+
+  void markPlayer2() {
+    int col;
+    int row = 6;
+    if (checkFreespace() > 0) {
+      do {
+        cout << "\n\nPlayer 2's turn \n";
+        cout << "Column(1-7) : ";
+        cin >> col;
+        cout << "\nRow(1-6) : " << row << "\nColumn(1-7) : " << col << endl;
+        col--;
+        row--;
+
+        if (board[row][col] == ' ') {
+          board[row][col] = Player2;
+          break;
+        }
+      } while (board[row][col] != ' ');
+    } else
+      printWinner(' ');
+  }
+
+  char checkWinner() {
+    // checking rows
+    for (int i = 6; i >= 0; i--) {
+      if (board[i][0] == board[i][1] && board[i][0] == board[i][2] &&
+          board[i][0] == board[i][3])
+        /* ||
+          board[i][6] == board[i][5] && board[i][6] == board[i][4] &&
+              board[i][6] == board[i][3])*/
+        return board[i][0];
+    }
+    // checking columns
+    for (int i = 6; i >= 0; i--) {
+      if (board[0][i] == board[1][i] && board[0][i] == board[2][i] &&
+          board[0][i] == board[3][i])
+        return board[i][0];
+    }
+    // checking diagonals
+    if (board[0][0] == board[1][1] && board[0][0] == board[2][2] &&
+        board[0][0] == board[3][3])
+      return board[0][0];
+    if (board[0][6] == board[1][5] && board[0][6] == board[2][4] &&
+        board[0][6] == board[3][3])
+      return board[0][0];
+    return ' ';
+  }
+
+  void printWinner(char winner) {
+    if (winner == Player1)
+      cout << "Player 1 won the game \n";
+    else if (winner == Player1)
+      cout << "Player 1 won the game \n";
+    else
+      cout << "Draw it's a tie game \n";
+  }
+};
+
+int main() {
+  char winner = ' ';
+  char choose;
+
+  TicTacToe Game;
+  Game.rules();
+
+  Game.resetBoard();
+  while (winner == ' ' && Game.checkFreespace() != 0) {
+
+    Game.markPlayer1();
+    Game.printBoard();
+    winner = Game.checkWinner();
+    if (winner != ' ' || Game.checkFreespace() == 0)
+      break;
+
+    Game.markPlayer2();
+    Game.printBoard();
+    winner = Game.checkWinner();
+    if (winner != ' ' || Game.checkFreespace() == 0)
+      break;
+  }
+
+  Game.printBoard();
+  Game.printWinner(winner);
+}
